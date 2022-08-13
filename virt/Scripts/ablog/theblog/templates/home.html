@@ -16,8 +16,8 @@
             {% endif %}    
             <br>
         {{ post.body |slice:":100" }} <br>
-        {% if post.header_image %}
-            <img src="{{ post.header_image.url }}" width="25%" 
+        {% if Images.image %}
+            <img src="{{ Images.image.url }}" width="25%" 
             height="25%" alt=""> <br><br>
         {% endif %}</li>
 {% endfor %}
