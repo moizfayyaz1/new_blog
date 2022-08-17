@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %} {{post.title}} {% endblock %}
+{% block content %}
+
+{{post}}
+<h1>{{ post.title }}</h1>
+<small>By: {{ post.author.first_name }} {{ post.author.last_name }}</small>
+<hr>
+<br>
+{% for img in post.images_set.all  %}
+<img src="{{ img.image.url}}" alt="">
+{% endfor %}
+<br> <br>
+<a href="{% url 'home' %}" id="img" class="btn btn-secondary">Back</a>
+<br><br>
+
+
+<div class="card mb-3">
+    <div class="row g-0">
+      <div class="col-md-2">
+        <img src="{{ post.author.profile.profile_image.url }}" class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-10">
+        <div class="card-body">
+          <h5 class="card-title">{{ post.author.first_name }} {{ post.author.last_name }}</h5>
+          <p class="card-text">{{ post.author.profile.bio }}</p>
+          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

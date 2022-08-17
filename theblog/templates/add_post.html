@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Create a New Blog Post {% endblock %}
+{% block content %}
+    
+{% if user.is_authenticated %}    
+<h1>Add Blog Post</h1>
+<br><br>
+<div class="form-group">
+    <form method='POST' enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="col-md-6 mb-4">
+                <label for="validationCustom01">Post Title</label>
+                <input type="text" class="form-control form-control-md" name="postTitle" id="validationCustom01" placeholder="Post Title" required>                               
+            </div>
+            <div class="col-md-6 mb-4">
+                <label for="validationCustom02">Post Description</label>
+                <textarea class="form-control form-control-md" name="description" id="validationCustom01" placeholder="Body of your post" rows="8" cols="80"></textarea>
+            </div>
+        </div>
+        <div class="images">
+            <h3 id="imagesHeading">
+                <span>
+                    Add Images
+                </span>
+            </h3>
+            <div class="row">               
+                <br>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3 imgUp">
+                            
+                            <label class="btn btn-primary">
+                                Upload<input type="file" class="uploadFile img" name="postImg" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;" multiple>
+                            </label>
+                        </div><!-- col-2 -->
+                        <i class="fa fa-plus imgAdd"></i>
+                    </div><!-- row -->
+                </div><!-- container -->
+            </div>
+        </div>
+        <label for="author">Author:</label>
+
+        <select id="author">
+          <option value="userid">{{user.id}}</option>
+          
+        </select> 
+        <br><br>
+        <button class="btn btn-secondary">Post</button>
+    </form>
+</div>
+<script>
+    $(document).ready(function() {
+        $("#crossButton").click(function() {
+            var crossId = [];
+            $(".crossButton").each(function() {
+                crossId.push($(this).attr("id"));
+            });
+
+        });
+    });
+</script>
+
+<script>
+    $(".imgAdd").click(function() {
+        $(this).closest(".row").find('.imgAdd').before(
+            '<div class="col-lg-3 imgUp"><div class="imagePreview"></div><label class="btn btn-primary">Upload<input type="file" class="uploadFile img" name="productImg" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>'
+            );
+    });
+    $(document).on("click", "i.del", function() {
+        $(this).parent().remove();
+    });
+    $(function() {
+        $(document).on("change", ".uploadFile", function() {
+            var uploadFile = $(this);
+            var files = !!this.files ? this.files : [];
+            if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
+
+            if (/^image/.test(files[0].type)) { // only image file
+                var reader = new FileReader(); // instance of the FileReader
+                reader.readAsDataURL(files[0]); // read the local file
+
+                reader.onloadend = function() { // set image data as background of div
+                    //alert(uploadFile.closest(".upimage").find('.imagePreview').length);
+                    uploadFile.closest(".imgUp").find('.imagePreview').css("background-image", "url(" + this.result + ")");
+                }
+            }
+
+        });
+    });
+</script>
+
+<script>
+    var add = '{% static "images/add.png" %}'
+    $(function() {
+        $('.crossButton').click(function(e) {
+            e.preventDefault();
+            var id = $(this).attr("id")
+            // var id2 = $('imagesClass')(this).attr("id")
+            var id2 = $(id).prev('.imagesClass').attr(id)
+            // var mainImageId = $('.imagesClass')
+            // var lastDiv = $("[id^=imagesClass]").last()
+            // console.log(lastDiv)
+            // alert(lastDiv)
+            // alert(id)
+            $("#imagesClass").attr('src', add).css({
+                'box-shadow': 'none',
+                '-webkit-box-shadow': 'none',
+                '-moz-box-shadow': 'none'
+            });
+            // $(id).css({'display':'none'});
+            // alert(id2)
+            if ('imagesClass4' === $('imagesClass').attr(id)) {
+                $('#crossButton').css({
+                    'display': 'none'
+                })
+            }
+
+            // console.log(e)
+            $('#productFile').prop("disabled", true);
+            $('#productFile').removeAttr("disabled");
+        });
+    });
+</script>
+{% else %}
+You are not logged in
+{% endif %}
+{% endblock %}
